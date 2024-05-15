@@ -20,6 +20,8 @@ namespace Complete
         private float m_OriginalPitch;              // The pitch of the audio source at the start of the scene.
         private ParticleSystem[] m_particleSystems; // References to all the particles systems used by the Tanks
 
+        public pausa pauseMenu;
+
         private void Awake ()
         {
             m_Rigidbody = GetComponent<Rigidbody> ();
@@ -67,14 +69,16 @@ namespace Complete
 
             // Store the original pitch of the audio source.
             m_OriginalPitch = m_MovementAudio.pitch;
+
+            pauseMenu = FindAnyObjectByType<pausa>();
         }
 
 
         private void Update ()
         {
             // Store the value of both input axes.
-            m_MovementInputValue = Input.GetAxis (m_MovementAxisName);
-            m_TurnInputValue = Input.GetAxis (m_TurnAxisName);
+            m_MovementInputValue = SimpleInput.GetAxis (m_MovementAxisName);
+            m_TurnInputValue = SimpleInput.GetAxis (m_TurnAxisName);
 
             EngineAudio ();
         }
@@ -123,6 +127,11 @@ namespace Complete
 
             // Apply this movement to the rigidbody's position.
             m_Rigidbody.MovePosition(m_Rigidbody.position + movement);
+
+            if (pauseMenu.pause)
+            {
+                return;
+            }
         }
 
 
